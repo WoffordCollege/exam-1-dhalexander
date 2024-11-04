@@ -1,5 +1,6 @@
 package edu.wofford;
 
+import java.util.concurrent.TransferQueue;
 
 /**
  * This class provides implements a game board for Connect Four.
@@ -114,7 +115,18 @@ public class ConnectFour {
     public Location getTopOfColumn(int column) {
         // Question 1
         // TODO
+        // System.out.println("--------");
+
+        for (int row = 0; row <= 5; row++) {
+            if (board[row][column] != Location.EMPTY) {
+                // System.out.println(board);
+                // System.out.println(board[row][column]);
+                return board[row][column];
+            }
+        }
         
+        // System.out.println(board);
+        // System.out.println(Location.EMPTY);
         return Location.EMPTY;
     }
     
@@ -129,8 +141,19 @@ public class ConnectFour {
     public int getHeightOfColumn(int column) {
         // Question 2
         // TODO
-        
-        return 0;
+        int count = 0;
+
+        for (int row = board.length - 1; row >= 0; row--) {
+            if (board[row][column] != Location.EMPTY) {
+                count += 1;
+            }
+        }
+
+        if (count <= 6) {
+            return count;
+        } else {
+            return 6;
+        }
     }
     
     /**
@@ -146,6 +169,26 @@ public class ConnectFour {
     public void dropToken(int column) {
         // Question 3
         // TODO
+        int height = 5 - getHeightOfColumn(column);
+        // System.out.println(getHeightOfColumn(column));
+        // System.out.println(height);
+        // System.out.println("-------");
+
+        if (height < 0 || height > 5) {
+            // System.out.println("didnt work");
+            throw new ColumnFullException();
+        }
+        else if (column >= 0 && column <= 6) {
+            // System.out.println("worked");
+            if (redTurn == true) {
+                board[height][column] = Location.RED;
+                redTurn = false;
+            } else {
+                board[height][column] = Location.BLACK;
+                redTurn = true;
+            }
+        }
+
         
     }
     
@@ -194,7 +237,34 @@ public class ConnectFour {
         // Question 5
         // TODO
         
-        return "";
+        String s = "";
+
+        for (int row = 0; row <= 5; row++) {
+            for (int column = 0; column <= 6; column++) {
+                s += ("|");
+                if(board[row][column] == Location.BLACK) {
+                    s += ("B");
+                }
+
+                if(board[row][column] == Location.RED) {
+                    s += ("R");
+                }
+
+                if(board[row][column] == Location.EMPTY) {
+                    s += (" ");
+                }
+
+                if (column == 6) {
+                    s += ("|\n");
+                }
+            }
+            if (row == 5) {
+                s += ("---------------");
+            }
+        }
+        
+        System.out.println(s);
+        return s;
     }
 
 
